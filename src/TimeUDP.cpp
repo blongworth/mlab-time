@@ -5,7 +5,7 @@ TimeUDP::TimeUDP(EthernetUDP& udp, IPAddress remoteIP, unsigned int remotePort)
 
 void TimeUDP::sendTime() {
   time_t currentTime = now();
-  byte timeBytes[4];
+  byte timeBytes[8];
   memcpy(timeBytes, &currentTime, sizeof(time_t));
 
   uint8_t checksum = calculateChecksum(timeBytes, sizeof(time_t));
@@ -19,7 +19,7 @@ void TimeUDP::sendTime() {
 time_t TimeUDP::receiveTime() {
   int packetSize = _udp.parsePacket();
   if (packetSize == sizeof(time_t) + 1) {
-    byte timeBytes[4];
+    byte timeBytes[8];
     _udp.read(timeBytes, sizeof(time_t));
     uint8_t receivedChecksum = _udp.read();
 
